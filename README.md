@@ -17,3 +17,21 @@ library(devtools) # install and load devtools
 install_github("lsw5077/DiagnoseHR")
 library(DiagnoseHR) # install DiagnoseHR from this github page
 ```
+
+## Examining the importance of individual relocations
+
+To see how much each relocation in your dataset is, you can use the function ```hrDiag()``` to recalculate your home range estimate leaving out one relocation at a time:
+
+```{r}
+load(sim_locs) # load the sample data that comes with the package
+
+hrDiag(sim_locs) 
+
+```
+
+
+
+
+
+
+
