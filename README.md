@@ -20,14 +20,27 @@ library(DiagnoseHR) # install DiagnoseHR from this github page
 
 ## Examining the importance of individual relocations
 
-To see how much each relocation in your dataset is, you can use the function ```hrDiag()``` to recalculate your home range estimate leaving out one relocation at a time:
+hrDiagnose requires a relocation dataset with an individual identification column "ID", x coordinate "x", and y coordinate "y". To see how much each relocation in your dataset is, you can use the function ```hrDiag()``` to recalculate your home range estimate leaving out one relocation at a time:
 
 ```{r}
 load(sim_locs) # load the sample data that comes with the package
-
 hrDiag(sim_locs) 
-
 ```
+The resulting elasticity plot shows how the size of the home range changes as each relocation is removed. A home range estimate where each relocation has a large effect on the size of the estimate will produce an elasticity plot with large, jagged fluctuations, while a less sensitive estimate will appear smoother. HRdiag also calculates the leverage of each relocation, how much each point contributes to the difference between the estimate with all the relocations and each N-1 recalculated home range. A leverage histogram where each relocation contributes a small amount will have a large number of observations clustered around 0, while an estimate where a few relocations have a large effect will produce a leverage histogram with observations distributed away from 0.
+
+![Elasticity plot](/images/9_desert.png) ![Leverage plot](/images/9_desert_lev.png)
+
+## Assessing home range asymptotes
+
+Home ranges are traditionally assumed to reach an asymptote as the number of observations increases. There are many reasons a home range may not reach an asymptote, and a home range that is not asympototic may still be useful. However, the interpretation and subsequent applicaiton of the estimate may change. The function ```hrAsym()``` iteratively adds relocations to an initial subsample to show if and when a home range reaches an asymptote:
+
+```{r}
+hrAsym(sim_locs)
+```
+![Asymptote plot](/images/asym.png)
+
+
+
 
 
 
