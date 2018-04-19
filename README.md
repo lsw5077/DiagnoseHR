@@ -1,10 +1,10 @@
-# DiagnoseHR: Sensitivity diagnostics for home range estimates 
+# DiagnoseHR: Sampling simulation and sensitivity diagnostics for home range estimates (and beyond!)
 
-Diagnose HR is an R package that provides functions for assessing sensitivity of home range estimates calculated using minimum convex polygon (MCP), local convex hull (LCH), and kernel utilization density (KUD) methods from the package [adehabitatHR](https://cran.r-project.org/web/packages/adehabitatHR/index.html). 
+Diagnose HR is an R package that provides functions for simulating detection-censored animal movement data and conducting home range sensitivity analysis. DiagnoseHR can facilitate sensitivity analysis of home ranges constructed using minimum convex polygon (MCP), local convex hull (LCH), and kernel utilization density (KUD) methods from the package [adehabitatHR](https://cran.r-project.org/web/packages/adehabitatHR/index.html). 
 
 ## Why assess home range sensitivity?
 
-Variation in detection probability, sampling methods, and choice of home range analytical methods can influence the outcome of a home range analysis by influencing which and how many locations are included in the analysis. This can be a problem when the end goal of the analysis is to learn something about an ecosystem or plan a conservation action. When working on a home range analysis, however, it can be difficult to tell how sensitive a given home range estimate is to the sample size or the addition or removal of individual relocations. The functions below can help illustrate how sample size and the identities of relocations included in a home range analysis affect the outcome of that analysis. 
+Variation in detection probability, sampling methods, and choice of home range analytical methods can influence the outcome of a spatial analysis by influencing which and how many locations are included in the analysis. This can be a problem when the end goal of the analysis is to learn something about an ecosystem or plan a conservation action. When working on a movement or home range analysis, however, it can be difficult to tell how sensitive a given estimate is to the sample size or the addition or removal of individual relocations. The functions in DiagnoseHR can help simulate data that reflects realistic sampling and detection constraints. The home range sensitivity functions can help illustrate how sample size and the identities of relocations included in a home range analysis affect the outcome of that analysis. 
 
 ## Installing DiagnoseHR
 
@@ -17,6 +17,20 @@ library(devtools) # install and load devtools
 install_github("lsw5077/DiagnoseHR")
 library(DiagnoseHR) # install DiagnoseHR from this github page
 ```
+## Simulating data
+
+Simulating data with DiagnoseHR occurs in four steps that reflect process by which animal movement data is created and collected: landscape formation, population establishment, animal movement, and sampling
+
+### Landscape formation
+
+We start by using the ```make_world()``` function to create a landscape that varies in detection probability, just like a real landscape. 
+
+```{r}
+myworld <- make_world(25,25)
+```
+
+
+
 
 ## Examining the importance of individual relocations
 
