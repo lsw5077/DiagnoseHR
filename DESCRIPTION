@@ -12,7 +12,7 @@ Description: A home range is the space an animal uses during a defined period. H
 	     affect inferences from spatial data. 
 Depends: R (>= 3.4.3)
 Imports: adehabitatHR,
-         dplyr,
+         tidyverse,
          sp,
          circular
 License: CRAPL
