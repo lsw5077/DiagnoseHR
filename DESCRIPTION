@@ -10,18 +10,6 @@ Description: A home range is the space an animal uses during a defined period. H
 	     assess whether a home range estimate is asymptotic. DiagnoseHR also provides functions to build
 	     simulated datasets under realistic detection and sampling parameters to simulate how sampling will
 	     affect inferences from spatial data. 
-Package: DiagnoseHR
-Title: Simulations and Diagnostics for home range estimates
-Version: 0.0.0.9000
-Authors@R: person("Lyndsie", "Wszola", email = "lyndsiewszola5@gmail.com", role = c("aut", "cre"))
-Description: A home range is the space an animal uses during a defined period. Home range is assumed to be
-	     an asymptotically increasing function of relocation sample size. We know that variation in detection 
-	     probability across a landscape can affect the estimated size of a home range, but it's not always
-	     obvious whether detection probability is affecting a given estimate. DiagnoseHR provides functions to
-	     evaluate the sensitivity of a home range estimate to the removal of individual relocations and to 
-	     assess whether a home range estimate is asymptotic. DiagnoseHR also provides functions to build
-	     simulated datasets under realistic detection and sampling parameters to simulate how sampling will
-	     affect inferences from spatial data. 
 Depends: R (>= 3.4.3),
           broom (>= 0.4.2), 
           cli (>= 1.0.0),
