@@ -17,6 +17,6 @@ Imports: adehabitatHR,
          circular
 License: CRAPL
 Encoding: UTF-8
-LazyData: True
-LazyLoad: True
+LazyData: true
+LazyLoad: true
 RoxygenNote: 6.0.1
