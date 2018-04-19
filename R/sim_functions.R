@@ -271,8 +271,7 @@ move_critters <- function(pop_world,
   
   org_stor <- org_stor %>% 
     dplyr::mutate(do.detect = ifelse(detect.prob < cell_prob,1,0),
-           step = step + 1) %>% # create a binary value for detection. 1 = detect
-    dplyr::select (-cell_x, -cell_y) ####
+           step = step + 1)# create a binary value for detection. 1 = detect
   
   return(org_stor)
   
@@ -322,7 +321,9 @@ sample_world <- function(world, # the movement record to sample
     
   }
   
-  sample_walk <- left_join(sample_stor, walk, by = c("cell_id","step")) 
+  sample_walk <- left_join(sample_stor, walk, by = c("cell_id","step")) %>%
+                 select(-x,-y)
+  
   detect_walk <- sample_walk[sample_walk$do.detect == 1,]
   org_sample <- list(cells_sampled = sample_stor, orgs_in_sample = na.omit(sample_walk), orgs_detected = na.omit(detect_walk))
   
