@@ -172,12 +172,13 @@ for (i in levels(ID)){
   
 }
     
-  out <<- list(result = result, result_tab = result_tab, sensitivity.plots = sensitivity.plots, leverage.plots = leverage.plots)
-  print(out)  
+  out <- list(result = result, result_tab = result_tab, sensitivity.plots = sensitivity.plots, leverage.plots = leverage.plots)
+  return(out)
+  print(out)
         
 }
 
-
+ 
 #' Asymptote diagnostics for home range estimates
 #' 
 #' The HRasym function allows users to examine whether and at what point the home range estimate
