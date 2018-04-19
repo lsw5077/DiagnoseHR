@@ -270,9 +270,9 @@ move_critters <- function(pop_world,
   }
   
   org_stor <- org_stor %>% 
-    mutate(do.detect = ifelse(detect.prob < cell_prob,1,0),
+    dplyr::mutate(do.detect = ifelse(detect.prob < cell_prob,1,0),
            step = step + 1) %>% # create a binary value for detection. 1 = detect
-    select (-cell_x, -cell_y) ####
+    dplyr::select (-cell_x, -cell_y) ####
   
   return(org_stor)
   
