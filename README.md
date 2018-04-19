@@ -2,7 +2,7 @@
 
 Diagnose HR is an R package that provides functions for simulating detection-censored animal movement data and conducting home range sensitivity analysis. DiagnoseHR can facilitate sensitivity analysis of home ranges constructed using minimum convex polygon (MCP), local convex hull (LCH), and kernel utilization density (KUD) methods from the package [adehabitatHR](https://cran.r-project.org/web/packages/adehabitatHR/index.html). 
 
-## Why assess home range sensitivity?
+## Why consider detection probability?
 
 Variation in detection probability, sampling methods, and choice of home range analytical methods can influence the outcome of a spatial analysis by influencing which and how many locations are included in the analysis. This can be a problem when the end goal of the analysis is to learn something about an ecosystem or plan a conservation action. When working on a movement or home range analysis, however, it can be difficult to tell how sensitive a given estimate is to the sample size or the addition or removal of individual relocations. The functions in DiagnoseHR can help simulate data that reflects realistic sampling and detection constraints. The home range sensitivity functions can help illustrate how sample size and the identities of relocations included in a home range analysis affect the outcome of that analysis. 
 
@@ -23,10 +23,15 @@ Simulating data with DiagnoseHR occurs in four steps that reflect process by whi
 
 ### Landscape formation
 
-We start by using the ```make_world()``` function to create a landscape that varies in detection probability, just like a real landscape. 
+We start by using the ```make_world()``` function to create a landscape that varies in detection probability, just like a real landscape. Our world, myworld, is a matrix of dimensions 25x25. It's detection distribution is defined by the flexible beta distribution. By setting the shape1 and shape2 arguments to the same number, we approximate a normal distribution bounded between 0 and 1. 
 
 ```{r}
-myworld <- make_world(25,25)
+myworld <- make_world(rows = 25, columns = 25, det_dist = "beta", shape1 = 10, shape2 = 10)
+
+ggplot() +
+  geom_tile(data = myworld, aes(x = x, y = y)+
+  theme_bw()
+
 ```
 
 
