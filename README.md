@@ -29,7 +29,7 @@ We start by using the ```make_world()``` function to create a landscape that var
 myworld <- make_world(rows = 25, columns = 25, det_dist = "beta", shape1 = 10, shape2 = 10)
 
 ggplot() +
-  geom_tile(data = myworld, aes(x = x, y = y)+
+  geom_tile(data = myworld, aes(x = x, y = y, fill = cell_prob)) +
   theme_bw()
 
 ```
