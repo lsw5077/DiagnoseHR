@@ -35,9 +35,7 @@ hrDiag <- function(locs = NULL,
                    amount = "NULL",
                    h = "href"){
   
-require(adehabitatHR)
-require(dplyr)
-require(sp)
+
   
 locs <- SpatialPointsDataFrame(locs, coords = locs[c("x","y")])
 
@@ -217,9 +215,7 @@ hrAsym <- function(locs = NULL,
                    amount = "NULL",
                    h = "href"){
   
-  require(adehabitatHR)
-  require(dplyr)
-  require(sp)
+
  
   # get data
   

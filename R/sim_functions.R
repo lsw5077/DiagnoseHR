@@ -67,6 +67,7 @@ make_world <- function(rows,
 #' @param num_per_cell is the maximum number of oganisms which may share a cell
 #' @param replace cells may be sampled with or without replacement
 #' @keywords correlated random walk
+#' @export
 #' @examples
 #' populate_world(num_organisms = 3, worldToPopulate = world, num_per_cell = 1, replace = F)
 
@@ -74,8 +75,7 @@ populate_world <- function(num_organisms, # desired number of organisms
                            worldToPopulate, # the world to put them in
                            num_per_cell, # max number of orgs that can occupy a cell
                            replace = FALSE){ # no sampling with replacement
-  require(dplyr) #### relocate
-  
+
   potential_orgs <- worldToPopulate[rep(1:nrow(worldToPopulate), each=num_per_cell),] # gives you world with number of open slots = world * orgs per cell. 
   # If 4 orgs can fit on on a cell, then num_per_cell should be 4
   
@@ -106,8 +106,7 @@ run.walk<- function(Nsteps, # number of steps
                     homerange.size, 
                     mu, 
                     rho){
-  require(circular) ## relocate
-  
+
   steplength <- rweibull(Nsteps, wei_shape, wei_scale) # draw steplengths from weibull dist
   
   thetaz <- suppressWarnings(rwrappedcauchy(Nsteps, mu = mu, rho = rho)) # draw directions
@@ -197,6 +196,7 @@ find.step<- function(walk.valz,
 #' @param mu the mu parameter of the wrapped cauchy distribution determining step direction 
 #' @param rho the rho parameter of the wrapped cauchy distribution determining step direction 
 #' @keywords correlated random walk
+#' @export
 #' @examples
 #' move_critters(pop_world = pop_world, myworld = world, world.type = 'closed', Nsteps = 10, homerange.size = 10, mu = 0, rho = 0)
 
@@ -209,8 +209,7 @@ move_critters <- function(pop_world,
                           homerange.size, 
                           mu = 0, 
                           rho = 0){
-  require(dplyr)
-  require(circular)
+
   
   pop_world.red<-pop_world[pop_world$N>0,] #reduced population to cells with organisms
   
@@ -292,6 +291,7 @@ move_critters <- function(pop_world,
 #' @param replace.world Whether to sample with replacement within the entire simulation
 #' @param seed An optional seed
 #' @keywords sampling, detection
+#' @export
 #' @examples
 #' sample_world(world = world, walk = walk, sample.steps = seq(1,10,1), replace.step = F, replace.world = T, seed = NULL)
 

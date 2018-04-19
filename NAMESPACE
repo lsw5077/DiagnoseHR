@@ -2,3 +2,7 @@
 
 export(hrAsym)
 export(hrDiag)
+export(make_world)
+export(move_critters)
+export(populate_world)
+export(sample_world)
