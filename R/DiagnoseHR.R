@@ -172,8 +172,8 @@ for (i in levels(ID)){
   
 }
     
-  out <<- list(result = result, result_tab = result_tab, 
-               #sensitivity.plots = sensitivity.plots, 
+  out <<- list(result = result, result_tab = result_tab 
+               #, sensitivity.plots = sensitivity.plots, 
                #leverage.plots = leverage.plots
               )
   print(out)
