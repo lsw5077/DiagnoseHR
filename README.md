@@ -128,3 +128,7 @@ Home ranges are traditionally assumed to reach an asymptote as the number of obs
 hrAsym(locs = sim_locs, ID = sim_locs$ID)
 ```
 ![Asymptote plot](/images/asym.png)
+
+### Disclaimer
+
+Although these data have been processed successfully, no warranty expressed or implied is made regarding the display or utility of the data on any other system or for general or scientific purposes, nor shall the act of distribution constitute any such warranty. The USGS or the U.S. Government shall not be held liable for improper or incorrect use of the data described and (or) contained herein.
