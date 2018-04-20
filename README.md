@@ -26,7 +26,7 @@ Simulating data with DiagnoseHR occurs in four steps that reflect process by whi
 We start by using the ```make_world()``` function to create a landscape that varies in detection probability, just like a real landscape. Our world, ```world```, is a matrix of dimensions 10x10. Its detection distribution is defined by the flexible beta distribution. By setting the shape1 and shape2 arguments to the same number, we approximate a normal distribution bounded between 0 and 1. When we graph ```world```, we can see that the tile colors reflect the probability of observing an organism in the space given its presence.
 
 ```{r}
-world <- make_world(rows = 25, columns = 25, det_dist = "beta", shape1 = 10, shape2 = 10)
+world <- make_world(rows = 10, columns = 10, det_dist = "beta", shape1 = 10, shape2 = 10)
 
 ggplot()+
       geom_tile(data = world, aes(x = x, y = y, fill = cell_prob))+
