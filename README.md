@@ -23,10 +23,10 @@ Simulating data with DiagnoseHR occurs in four steps that reflect process by whi
 
 ### Landscape formation
 
-We start by using the ```make_world()``` function to create a landscape that varies in detection probability, just like a real landscape. Our world, myworld, is a matrix of dimensions 25x25. It's detection distribution is defined by the flexible beta distribution. By setting the shape1 and shape2 arguments to the same number, we approximate a normal distribution bounded between 0 and 1. 
+We start by using the ```make_world()``` function to create a landscape that varies in detection probability, just like a real landscape. Our world, ```world```, is a matrix of dimensions 10x10. Its detection distribution is defined by the flexible beta distribution. By setting the shape1 and shape2 arguments to the same number, we approximate a normal distribution bounded between 0 and 1. When we graph ```world```, we can see that the tile colors reflect the probability of observing an organism in the space given its presence.
 
 ```{r}
-myworld <- make_world(rows = 25, columns = 25, det_dist = "beta", shape1 = 10, shape2 = 10)
+world <- make_world(rows = 25, columns = 25, det_dist = "beta", shape1 = 10, shape2 = 10)
 
 ggplot()+
       geom_tile(data = world, aes(x = x, y = y, fill = cell_prob))+
@@ -37,8 +37,78 @@ ggplot()+
 
 ![Detection_world](/images/world_plot.png)
 
+### Populating the world
 
-## Examining the importance of individual relocations
+Now that we have our simulation space, ```world```, we need an organism to observe. We populate the simulation space with one organism using the ```populate_world()``` function. When we look at our plot now, we can see our organism in the simulation space. 
+
+```{r}
+
+popworld <- populate_world(1, # spawn one organism
+                           world, # in world
+                           1, # with a maximum of one organism per cell
+                           replace = T) # sampling with replacement
+
+ggplot()+
+  geom_tile(data = popworld, aes(x = x, y = y, fill = cell_prob))+
+  geom_point(data = popworld[popworld$N > 0,], aes(x = x, y = y), size = 20, color= "black") +
+  geom_point(data = popworld[popworld$N > 0,], aes(x = x, y = y), size = 10, color= "red") +
+  coord_cartesian(expand = F)+
+  theme_bw()
+```
+
+![Popworld](/images/popworld.png)
+
+### Simulating organism movement
+
+Our simulated organism will now take a walk around the simulation space, which we will direct using the ```move_critters()``` function.
+
+```{r}
+walk <- move_critters(popworld, # population to move
+                      world, # simulation space to move through
+                      world.type = "closed", # can the orgs move off the simulation space ("open") or not? ("closed")
+                      Nsteps = 20, # Number of time steps during which the organism can move
+                      homerange.size = 10, # the organism's home range size, if fixed
+                      homerange.type = "fixed", # do organisms get the same home range size ("fixed") or draw each iteration ("random")?
+                      mu = 0, # direction distribution, from a wrapped cauchy distribution
+                      rho = 0)
+                      
+ggplot()+
+  geom_tile(data = world, aes(x = x, y = y, fill = cell_prob))+
+  geom_line(data = walk, aes(x = x, y = y), size = 2)+
+  geom_point(data = walk, aes(x = x, y = y), size = 20, color= "black") +
+  geom_point(data = walk, aes(x = x, y = y), size = 10, color= "red") +  coord_cartesian(expand = F)+
+  theme_bw()                      
+                      
+```
+![Correlated_random_walk](/images/walk.png)
+
+### Sampling organism movement
+
+So far, we have created a simulation space with varying detection, and a simulated organism that travels around the simulation space. Now let's look at what happens when impose some realistic sampling constraints. Using the ```sample_world()``` function, we can see what happens to our organism movement record when we sample half the cells every other day for the duration of the study period. When we compare our sampling plot to our plot of the organism's walk, we can see that, even though the path is similar, we missed some observations because we didn't sample the right time step or detection probability was too low. 
+
+```{r}
+
+sample <- sample_world(world, # The simulation space in which to sample
+                       walk, # The organism movement record to sample
+                       n.cells = 50, # the number of cells to sample per time step
+                       sample.steps = seq(2, 20, 2), # the time steps to sample
+                       replace.step = F, # don't allow replacement within timesteps
+                       replace.world = T, # do allow replacement between timesteps,
+                       seed = NULL) # We don't set a seed, although we could if we want consistent results
+                       
+ ggplot()+
+  geom_tile(data = world, aes(x = x, y = y, fill = cell_prob))+
+  geom_line(data = walk, aes(x = x, y = y), size = 2)+
+  geom_point(data = sample$orgs_detected, aes(x = cell_x, y = cell_y), size = 20, color= "black") +
+  geom_point(data = sample$orgs_detected, aes(x = cell_x, y = cell_y), size = 10, color= "red") +  coord_cartesian(expand = F)+
+  theme_bw()                      
+                       
+```
+![Sample](/images/sample.png)
+
+## Assessing home range estimate sensitivity
+
+### Examining the importance of individual relocations
 
 hrDiagnose requires a relocation dataset with an individual identification column "ID", x coordinate "x", and y coordinate "y". To see how much each relocation in your dataset is, you can use the function ```hrDiag()``` to recalculate your home range estimate leaving out one relocation at a time:
 
@@ -50,7 +120,7 @@ The resulting elasticity plot shows how the size of the home range changes as ea
 
 ![Elasticity plot](/images/9_desert.png) ![Leverage plot](/images/9_desert_lev.png)
 
-## Assessing home range asymptotes
+### Assessing home range asymptotes
 
 Home ranges are traditionally assumed to reach an asymptote as the number of observations increases. There are many reasons a home range may not reach an asymptote, and a home range that is not asympototic may still be useful. However, the interpretation and subsequent applicaiton of the estimate may change. The function ```hrAsym()``` iteratively adds relocations to an initial subsample to show if and when a home range reaches an asymptote:
 
@@ -58,13 +128,3 @@ Home ranges are traditionally assumed to reach an asymptote as the number of obs
 hrAsym(locs = sim_locs, ID = sim_locs$ID)
 ```
 ![Asymptote plot](/images/asym.png)
-
-
-
-
-
-
-
-
-
-
