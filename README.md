@@ -28,13 +28,14 @@ We start by using the ```make_world()``` function to create a landscape that var
 ```{r}
 myworld <- make_world(rows = 25, columns = 25, det_dist = "beta", shape1 = 10, shape2 = 10)
 
-ggplot() +
-  geom_tile(data = myworld, aes(x = x, y = y, fill = cell_prob)) +
-  theme_bw()
+ggplot()+
+      geom_tile(data = world, aes(x = x, y = y, fill = cell_prob))+
+      coord_cartesian(expand = F)+
+      theme_bw()
 
 ```
 
-
+![Detection_world](/images/world_plot.png)
 
 
 ## Examining the importance of individual relocations
