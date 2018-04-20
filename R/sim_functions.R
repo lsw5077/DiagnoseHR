@@ -101,11 +101,11 @@ populate_world <- function(num_organisms, # desired number of organisms
 run.walk<- function(Nsteps, # number of steps
                     x1, 
                     y1, 
-                    wei_shape = 2,
-                    wei_scale = 350,
                     homerange.size, 
                     mu, 
-                    rho){
+                    rho,
+                    wei_shape = 2,
+                    wei_scale = homerange.size){
 
   steplength <- rweibull(Nsteps, wei_shape, wei_scale) # draw steplengths from weibull dist
   
@@ -208,7 +208,9 @@ move_critters <- function(pop_world,
                           homerange.type="fixed", 
                           homerange.size, 
                           mu = 0, 
-                          rho = 0){
+                          rho = 0,
+                          wei_shape = 2,
+                          wei_scale = homerange.size){
 
   
   pop_world.red<-pop_world[pop_world$N>0,] #reduced population to cells with organisms
