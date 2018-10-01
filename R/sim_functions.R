@@ -96,16 +96,17 @@ populate_world <- function(num_organisms, # desired number of organisms
 
 
 
-# 
+# ok, we're going to be a bit creative with the homerange size argument. Users are going to expect
+# a homerange in square units, but the functions need a radius. So we're going to convert from hr size using a = pi*r^2
 
 run.walk<- function(Nsteps, # number of steps
                     x1, 
                     y1, 
-                    homerange.size, 
+                    homerange.radius, 
                     mu, 
                     rho,
                     wei_shape = 2,
-                    wei_scale = homerange.size){
+                    wei_scale = homerange.radius){
 
   steplength <- rweibull(Nsteps, wei_shape, wei_scale) # draw steplengths from weibull dist
   
@@ -127,7 +128,7 @@ run.walk<- function(Nsteps, # number of steps
                                 y = y1), 
                      walk.valz) # walk.valz gives you a movement trajectory for simulated orgs
   
-  walk.valz <- find.step(walk.valz, homerange.size) #but seems to need find.step, and homerange.size, which we define below
+  walk.valz <- find.step(walk.valz, homerange.radius) #but seems to need find.step, and homerange.size, which we define below
   
   return(walk.valz)
 }
@@ -147,7 +148,7 @@ find.distance <- function(x1,
 # direction finding function, helper, not for user
 
 find.step<- function(walk.valz,
-                     homerange.size){
+                     homerange.radius){
   
   walk.valz$new.dist<- NA
   walk.valz$prop.dist <- NA
@@ -165,7 +166,7 @@ find.step<- function(walk.valz,
                                            potential.step.x, 
                                            potential.step.y) # calculate distance between current loc and potential step
     
-    walk.valz$prop.dist[i] <- walk.valz$new.dist[i]/homerange.size # calculate how much of the home range the step would be
+    walk.valz$prop.dist[i] <- walk.valz$new.dist[i]/homerange.radius # calculate how much of the home range radius the step would be
     
     probz <- (0.9999 / (1 + exp(4.741 + -9.407*walk.valz$prop.dist[i]))) 
     
@@ -192,7 +193,7 @@ find.step<- function(walk.valz,
 #' @param world.type worlds may be 'open' such that orgs can leave the sample space, or 'closed' such that they cannot
 #' @param Nsteps The number of timesteps in which the organisms can make movements
 #' @param homerange.type Home ranges may be either 'fixed' with a defined home range for all organisms, or 'random' such that each individual draws a home range size in each iteration
-#' @param homerange.size Home range size of individuals with a fixed home range
+#' @param homerange.size Home range size in square units of individuals with a fixed home range
 #' @param mu the mu parameter of the wrapped cauchy distribution determining step direction 
 #' @param rho the rho parameter of the wrapped cauchy distribution determining step direction 
 #' @keywords correlated random walk
@@ -210,9 +211,10 @@ move_critters <- function(pop_world,
                           mu = 0, 
                           rho = 0,
                           wei_shape = 2,
-                          wei_scale = homerange.size){
-
+                          wei_scale = sqrt(homerange.size/pi)){
   
+  homerange.radius <- sqrt(homerange.size/pi)
+
   pop_world.red<-pop_world[pop_world$N>0,] #reduced population to cells with organisms
   
   pop_world.red<-pop_world.red[rep(1:nrow(pop_world.red),pop_world.red$N),c("x","y","cell_id")] # expands the cells for each organism
@@ -229,7 +231,7 @@ move_critters <- function(pop_world,
       run_steps<-run.walk(Nsteps, 
                           x1=pop_world.red$x[i], 
                           y1=pop_world.red$y[i], 
-                          homerange.size=homerange.size, # homerange fixed for all organisms
+                          homerange.radius = homerange.radius, # homerange fixed for all organisms
                           mu = mu, rho=rho)  
       
     }
@@ -237,7 +239,7 @@ move_critters <- function(pop_world,
       run_steps<-run.walk(Nsteps, 
                           x1=pop_world.red$x[i],
                           y1=pop_world.red$y[i], 
-                          homerange.size=rpois(1,homerange.size), # mean homerange size is equal to homerange size (poisson distribution)
+                          homerange.size=rgamma(1,homerange.radius), # mean homerange size is equal to homerange size (poisson distribution)
                           mu = mu, 
                           rho=rho) 
       
