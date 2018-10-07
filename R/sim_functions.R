@@ -105,10 +105,10 @@ run.walk<- function(Nsteps, # number of steps
                     homerange.radius, 
                     mu, 
                     rho,
-                    wei_shape = 2,
-                    wei_scale = homerange.radius){
+                    wei.shape = 2,
+                    wei.scale = homerange.radius){
 
-  steplength <- rweibull(Nsteps, wei_shape, wei_scale) # draw steplengths from weibull dist
+  steplength <- rweibull(Nsteps, wei.shape, wei.scale) # draw steplengths from weibull dist
   
   thetaz <- suppressWarnings(rwrappedcauchy(Nsteps, mu = mu, rho = rho)) # draw directions
   uniformz <- runif(Nsteps, 0,1) # step-specific 
@@ -148,7 +148,8 @@ find.distance <- function(x1,
 # direction finding function, helper, not for user
 
 find.step<- function(walk.valz,
-                     homerange.radius){
+                     homerange.radius,
+                     site.fidelity){
   
   walk.valz$new.dist<- NA
   walk.valz$prop.dist <- NA
@@ -168,7 +169,7 @@ find.step<- function(walk.valz,
     
     walk.valz$prop.dist[i] <- walk.valz$new.dist[i]/homerange.radius # calculate how much of the home range radius the step would be
     
-    probz <- (0.9999 / (1 + exp(4.741 + -9.407*walk.valz$prop.dist[i]))) 
+    probz <- (site.fidelity / (1 + exp(4.741 + -9.407*walk.valz$prop.dist[i]))) 
     
     if(probz > runif(1,0,1)){
       #  If probability exceeds a random uniform, organism turns back toward origin point
@@ -191,15 +192,18 @@ find.step<- function(walk.valz,
 #' @param pop_world is the simulated population, created by populate_world()
 #' @param myworld is a detection world, created by make_world()
 #' @param world.type worlds may be 'open' such that orgs can leave the sample space, or 'closed' such that they cannot
-#' @param Nsteps The number of timesteps in which the organisms can make movements
+#' @param Nsteps the number of timesteps in which the organisms can make movements
 #' @param homerange.type Home ranges may be either 'fixed' with a defined home range for all organisms, or 'random' such that each individual draws a home range size in each iteration
 #' @param homerange.size Home range size in square units of individuals with a fixed home range
 #' @param mu the mu parameter of the wrapped cauchy distribution determining step direction 
 #' @param rho the rho parameter of the wrapped cauchy distribution determining step direction 
+#' @param wei.shape the shape parameter of the weibull distribution determining step length
+#' @param wei.scale the scale parameter of the weibull distribution determing step length
+#' @param site.fidelity the degree of site fidelity (0-1)
 #' @keywords correlated random walk
 #' @export
 #' @examples
-#' move_critters(pop_world = pop_world, myworld = world, world.type = 'closed', Nsteps = 10, homerange.size = 10, mu = 0, rho = 0)
+#' move_critters(pop_world = pop_world, myworld = world, world.type = 'closed', Nsteps = 10, homerange.size = 10, mu = 0, rho = 0, site.fidelity = 1)
 
 
 move_critters <- function(pop_world, 
@@ -210,8 +214,11 @@ move_critters <- function(pop_world,
                           homerange.size, 
                           mu = 0, 
                           rho = 0,
-                          wei_shape = 2,
-                          wei_scale = sqrt(homerange.size/pi)){
+                          wei.shape = 2,
+                          wei.scale = sqrt(homerange.size/pi),
+                          site.fidelity = 1){
+  
+  if (site.fidelity > 1 | site.fidelity < 0) {stop print("Please choose a site fidelity between 0 and 1")}
   
   homerange.radius <- sqrt(homerange.size/pi)
 
