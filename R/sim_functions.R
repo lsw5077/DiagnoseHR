@@ -106,14 +106,15 @@ run.walk<- function(Nsteps, # number of steps
                     mu, 
                     rho,
                     wei.shape = 2,
-                    wei.scale = homerange.radius){
+                    wei.scale = homerange.radius,
+                    site.fidelity){
 
   steplength <- rweibull(Nsteps, wei.shape, wei.scale) # draw steplengths from weibull dist
   
   thetaz <- suppressWarnings(rwrappedcauchy(Nsteps, mu = mu, rho = rho)) # draw directions
   uniformz <- runif(Nsteps, 0,1) # step-specific 
   
-  walk.valz<- data.frame(step = 1:Nsteps,
+  walk.valz <- data.frame(step = 1:Nsteps,
                          steplength = steplength,
                          thetaz = thetaz, 
                          detect.prob = uniformz, 
@@ -128,7 +129,9 @@ run.walk<- function(Nsteps, # number of steps
                                 y = y1), 
                      walk.valz) # walk.valz gives you a movement trajectory for simulated orgs
   
-  walk.valz <- find.step(walk.valz, homerange.radius) #but seems to need find.step, and homerange.size, which we define below
+  walk.valz <- find.step(walk.valz, 
+                         homerange.radius,
+                         site.fidelity) #but seems to need find.step, and homerange.size, which we define below
   
   return(walk.valz)
 }
@@ -218,7 +221,9 @@ move_critters <- function(pop_world,
                           wei.scale = sqrt(homerange.size/pi),
                           site.fidelity = 1){
   
-  if (site.fidelity > 1 | site.fidelity < 0) {stop print("Please choose a site fidelity between 0 and 1")}
+  if (site.fidelity > 1 | site.fidelity < 0) {
+    stop 
+    print("Please choose a site fidelity between 0 and 1")}
   
   homerange.radius <- sqrt(homerange.size/pi)
 
@@ -239,7 +244,9 @@ move_critters <- function(pop_world,
                           x1=pop_world.red$x[i], 
                           y1=pop_world.red$y[i], 
                           homerange.radius = homerange.radius, # homerange fixed for all organisms
-                          mu = mu, rho=rho)  
+                          mu = mu,
+                          rho=rho,
+                          site.fidelity = site.fidelity)  
       
     }
     if(homerange.type=="random"){
@@ -248,7 +255,8 @@ move_critters <- function(pop_world,
                           y1=pop_world.red$y[i], 
                           homerange.size=rgamma(1,homerange.radius), # mean homerange size is equal to homerange size (poisson distribution)
                           mu = mu, 
-                          rho=rho) 
+                          rho=rho,
+                          site.fidelity = site.fidelity) 
       
     }
     
