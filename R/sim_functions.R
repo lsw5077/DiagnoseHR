@@ -172,7 +172,7 @@ find.step<- function(walk.valz,
     
     walk.valz$prop.dist[i] <- walk.valz$new.dist[i]/homerange.radius # calculate how much of the home range radius the step would be
     
-    probz <- (site.fidelity / (1 + exp(4.741 + -9.407*walk.valz$prop.dist[i]))) 
+    probz <- site.fidelity*walk.valz$prop.dist[i]*2/(1+ site.fidelity*walk.valz$prop.dist[i])
     
     if(probz > runif(1,0,1)){
       #  If probability exceeds a random uniform, organism turns back toward origin point
