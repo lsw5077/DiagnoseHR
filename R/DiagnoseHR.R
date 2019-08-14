@@ -17,6 +17,8 @@
 
 
 hrDiag <- function(locs = NULL,
+                   x = x,
+                   y = y,
                    type = "mcp",
                    ID = locs$ID,
                    levels = 90,
@@ -35,7 +37,10 @@ hrDiag <- function(locs = NULL,
                    amount = "NULL",
                    h = "href"){
   
-
+# adding x and y arguments
+  
+locs$x <- x
+locs$y <- y
   
 locs <- SpatialPointsDataFrame(locs, coords = locs[c("x","y")])
 
@@ -201,6 +206,8 @@ for (i in levels(ID)){
   
 hrAsym <- function(locs = NULL,
                    type = "mcp",
+                   x = x,
+                   y = y,
                    ID = NULL,
                    levels = 90,
                    percent = 95,
@@ -217,13 +224,16 @@ hrAsym <- function(locs = NULL,
                    arange = NULL,
                    amount = "NULL",
                    h = "href"){
-  
 
- 
   # get data
   
-  ID <- as.factor(locs$ID)
-  locs$ID <- ID
+  #ID <- as.factor(locs$ID)
+  locs$ID <- as.factor(ID)
+  
+  # correct for x and y issues
+  locs$x <- x
+  locs$y <- y
+  
   locs <- SpatialPointsDataFrame(locs, coords = locs[c("x","y")])
   
   # make result df

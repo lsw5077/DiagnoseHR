@@ -340,10 +340,13 @@ sample_world <- function(world, # the movement record to sample
     
   }
   
-  sample_walk <- left_join(sample_stor, walk, by = c("cell_id","step")) %>%
-                 dplyr::select(-x,-y)
+  # Note 8/11: made change here.
+  
+  sample_walk <- left_join(sample_stor, walk, by = c("cell_id","step")) 
+                 # %>% dplyr::select(x,y)
   
   detect_walk <- sample_walk[sample_walk$do.detect == 1,]
+  
   org_sample <- list(cells_sampled = sample_stor, orgs_in_sample = na.omit(sample_walk), orgs_detected = na.omit(detect_walk))
   
   return(org_sample)
